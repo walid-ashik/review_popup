@@ -26,6 +26,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
+  generate: true
   assets:
     - assets/lottie/
+  fonts:
+    - family:  ReviewPopupIcons
+      fonts:
+       - asset: assets/fonts/ReviewPopupIcons.ttf

@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:review_popup/src/review_popup/constant/constant.dart';
+import 'package:review_popup/src/review_popup/icons/review_popup_icons.dart';
 import 'package:review_popup/src/review_popup/widgets/in_app_review_popup.dart';
 import 'package:review_popup/src/review_popup/widgets/review_popup_icon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReviewPopUp extends StatefulWidget {
@@ -43,7 +49,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
             children: [
               ReviewPopupEmojiAndText(
                 text: 'Not at all',
-                icon: Icons.emoji_emotions_rounded,
+                icon: ReviewPopupIcons.sad_emoji,
                 color: const Color(0xFFC3C3C3),
                 onTap: () {
                   Navigator.pop(context);
@@ -52,7 +58,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
               ),
               ReviewPopupEmojiAndText(
                 text: 'It’s ok',
-                icon: Icons.emoji_emotions_rounded,
+                icon: ReviewPopupIcons.ok_emoji,
                 color: const Color(0xFF929090),
                 onTap: () {
                   Navigator.pop(context);
@@ -61,7 +67,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
               ),
               ReviewPopupEmojiAndText(
                 text: 'A lot!',
-                icon: Icons.emoji_emotions_rounded,
+                icon: ReviewPopupIcons.a_lot_emoji,
                 color: const Color(0xFF7B7B7B),
                 onTap: () {
                   Navigator.pop(context);
@@ -70,7 +76,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
               ),
               ReviewPopupEmojiAndText(
                 text: 'Love it!',
-                icon: Icons.emoji_emotions_rounded,
+                icon: ReviewPopupIcons.love_emoji,
                 color: const Color(0xFF4B4B4B),
                 onTap: () {
                   Navigator.pop(context);
@@ -91,17 +97,42 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
       builder: (BuildContext context) {
         return InAppReviewRequestPopUp(
           lottie: 'assets/lottie/hello_expert.json',
-          // text: 'Can you please share your\nfeedback?',
-          // onContinueClicked: () {
-          //   Navigator.pop(context);
-          //   _onMailUsClicked();
-          // },
-          // onNotNowClicked: () {
-          //   Navigator.pop(context);
-          // },
+          text: 'Would you love to Rate Quote Writer'
+              '\non ${_getPlatfromStoreName()}?',
+          onContinueClicked: () {
+            onContinueClicked();
+            Navigator.pop(context);
+          },
+          onNotNowClicked: () {
+            onNotNowClicked();
+            Navigator.pop(context);
+          },
         );
       },
     );
+  }
+
+  void onContinueClicked() async {
+    _openStoreListing();
+    final _preferences = await SharedPreferences.getInstance();
+    _preferences.setBool(Constant.isAppStoreOpened, false);
+  }
+
+  void onNotNowClicked() async {
+    final _preferences = await SharedPreferences.getInstance();
+    _preferences.setBool(Constant.isAppStoreOpened, true);
+  }
+
+  Future<void> _openStoreListing() async {
+    await InAppReview.instance.openStoreListing(appStoreId: '1636138219');
+  }
+
+  String _getPlatfromStoreName() {
+    if (Platform.isIOS) {
+      return 'AppStore';
+    } else {
+      return 'PlayStore';
+    }
   }
 
   void _onFeedUsClicked() {
@@ -110,7 +141,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return InAppReviewRequestPopUp(
-          lottie: 'assets/lottie/hello_expert.json',
+          lottie: 'assets/lottie/sad_emoji.json',
           text: 'Can you please share your\nfeedback?',
           onContinueClicked: () {
             Navigator.pop(context);

@@ -1,22 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:lottie/lottie.dart';
-import 'package:review_popup/src/review_popup/constant/constant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class InAppReviewRequestPopUp extends StatefulWidget {
   const InAppReviewRequestPopUp({
     required this.lottie,
-    this.text,
+    required this.text,
     this.onContinueClicked,
     this.onNotNowClicked,
     Key? key,
   }) : super(key: key);
 
   final String lottie;
-  final String? text;
+  final String text;
   final VoidCallback? onContinueClicked;
   final VoidCallback? onNotNowClicked;
 
@@ -26,13 +21,6 @@ class InAppReviewRequestPopUp extends StatefulWidget {
 }
 
 class _InAppReviewRequestPopUpState extends State<InAppReviewRequestPopUp> {
-  // late SharedPreferences _preferences;
-  // @override
-  // void initState() {
-  //   _initPreference();
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -52,9 +40,7 @@ class _InAppReviewRequestPopUpState extends State<InAppReviewRequestPopUp> {
           ),
           const SizedBox(height: 20),
           Text(
-            widget.text ??
-                'Would you love to Rate Quote Writer'
-                    '\non ${_getPlatfromStoreName()}?',
+            widget.text,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 18,
@@ -63,95 +49,62 @@ class _InAppReviewRequestPopUpState extends State<InAppReviewRequestPopUp> {
             ),
           ),
           const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: widget.onContinueClicked ?? onContinueClicked,
-            child: const Text(
-              'CONTINUE',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.black,
+                elevation: 0,
+                fixedSize: const Size(
+                  double.maxFinite,
+                  45,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              onPressed: widget.onContinueClicked,
+              child: const Text(
+                'CONTINUE',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-          // StadiumButton(
-          //   leftPadding: 20,
-          //   rightPadding: 20,
-          //   color: Colors.black,
-          //   onTap: widget.onContinueClicked ?? onContinueClicked,
-          //   child: const Text(
-          //     'CONTINUE',
-          //     textAlign: TextAlign.center,
-          //     style: TextStyle(
-          //       fontSize: 18,
-          //       fontWeight: FontWeight.w700,
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          // ),
           const SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: widget.onNotNowClicked ?? onNotNowClicked,
-            child: const Text(
-              'NOT NOW',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white,
+                elevation: 0,
+                fixedSize: const Size(
+                  double.maxFinite,
+                  45,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              onPressed: widget.onNotNowClicked,
+              child: const Text(
+                'NOT NOW',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
-          // StadiumButton(
-          //   leftPadding: 20,
-          //   rightPadding: 20,
-          //   color: Colors.white,
-          //   onTap: widget.onNotNowClicked ?? onNotNowClicked,
-          //   child: const Text(
-          //     'NOT NOW',
-          //     textAlign: TextAlign.center,
-          //     style: TextStyle(
-          //       fontSize: 14,
-          //       fontWeight: FontWeight.w700,
-          //       color: Colors.black,
-          //     ),
-          //   ),
-          // ),
           const SizedBox(height: 10),
         ],
       ),
     );
-  }
-
-  void onContinueClicked() async {
-    final _preferences = await SharedPreferences.getInstance();
-
-    Navigator.pop(context);
-    _openStoreListing();
-    _preferences.setBool(Constant.isAppStoreOpened, false);
-  }
-
-  void onNotNowClicked() async {
-    final _preferences = await SharedPreferences.getInstance();
-
-    Navigator.pop(context);
-    _preferences.setBool(Constant.isAppStoreOpened, true);
-  }
-
-  String _getPlatfromStoreName() {
-    if (Platform.isIOS) {
-      return 'AppStore';
-    } else {
-      return 'PlayStore';
-    }
-  }
-
-  // Future<void> _initPreference() async {
-  //   _preferences = await SharedPreferences.getInstance();
-  // }
-
-  Future<void> _openStoreListing() async {
-    await InAppReview.instance.openStoreListing(appStoreId: '1636138219');
   }
 }
