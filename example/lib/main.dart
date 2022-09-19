@@ -8,7 +8,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,7 +21,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
 
   final String title;
 
@@ -31,14 +33,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final reviewPopUp = ReviewPopUpUtils(
+    appName: 'Appuly',
+    appId: '1636138219',
+    tapCount: 7,
+  );
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-    final calculator = Calculator();
-    calculator.addOne(3);
+  @override
+  void initState() {
+    super.initState();
+    reviewPopUp.loadTotalQuoteSaveSharedCount();
   }
 
   @override
@@ -52,20 +56,20 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'Pop up will show after few tap',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () {
+                reviewPopUp.increaseTotalQuoteSaveSharedCount();
+                reviewPopUp.showReviewPopUp(context);
+                reviewPopUp.buildInAppReviewRequestPopUp(context);
+              },
+              child: const Text('Press Here'),
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
