@@ -36,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final reviewPopUp = ReviewPopUpUtils(
     appName: 'Appuly',
     appId: '1636138219',
+    tapCount: 7,
   );
 
   @override
@@ -55,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'Pop up will show after few tap',
             ),
             const SizedBox(height: 50),
             ElevatedButton(
@@ -64,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 reviewPopUp.showReviewPopUp(context);
                 reviewPopUp.buildInAppReviewRequestPopUp(context);
               },
-              child: const Icon(Icons.add),
+              child: const Text('Press Here'),
             )
           ],
         ),

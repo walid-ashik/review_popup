@@ -11,8 +11,9 @@ class ReviewPopUpUtils {
   ReviewPopUpUtils({
     required this.appId,
     required this.appName,
+    this.tapCount = 6,
   });
-
+  late int tapCount;
   late String appName;
   late String appId;
   late bool _isAppStoreOpened;
@@ -34,7 +35,7 @@ class ReviewPopUpUtils {
   }
 
   Future<void> showReviewPopUp(BuildContext context) async {
-    if (_totalQuoteSaveSharedCount == 4) {
+    if (_totalQuoteSaveSharedCount == tapCount) {
       await showDialog<void>(
         context: context,
         barrierDismissible: false,
