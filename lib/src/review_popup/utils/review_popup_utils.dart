@@ -8,8 +8,15 @@ import 'package:review_popup/src/review_popup/widgets/review_popup_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReviewPopUpUtils {
-  int _totalQuoteSaveSharedCount = 0;
+  ReviewPopUpUtils({
+    required this.appId,
+    required this.appName,
+  });
+
+  late String appName;
+  late String appId;
   late bool _isAppStoreOpened;
+  int _totalQuoteSaveSharedCount = 0;
 
   Future<void> increaseTotalQuoteSaveSharedCount() async {
     final _preferences = await SharedPreferences.getInstance();
@@ -17,7 +24,6 @@ class ReviewPopUpUtils {
       Constant.totalQuoteSaveSharedCount,
       _totalQuoteSaveSharedCount++,
     );
-    print(_totalQuoteSaveSharedCount);
   }
 
   Future<void> loadTotalQuoteSaveSharedCount() async {
@@ -28,13 +34,15 @@ class ReviewPopUpUtils {
   }
 
   Future<void> showReviewPopUp(BuildContext context) async {
-    print(_totalQuoteSaveSharedCount);
     if (_totalQuoteSaveSharedCount == 4) {
       await showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return const ReviewPopUp();
+          return ReviewPopUp(
+            appName: appName,
+            appId: appId,
+          );
         },
       );
     }
@@ -44,7 +52,6 @@ class ReviewPopUpUtils {
     final _preferences = await SharedPreferences.getInstance();
     _isAppStoreOpened =
         _preferences.getBool(Constant.isAppStoreOpened) ?? false;
-    print(_isAppStoreOpened);
     if (_isAppStoreOpened) {
       await showDialog<void>(
         context: context,
@@ -52,7 +59,7 @@ class ReviewPopUpUtils {
         builder: (BuildContext context) {
           return InAppReviewRequestPopUp(
             lottie: 'assets/lottie/hello_expert.json',
-            text: 'Would you love to Rate Quote Writer'
+            text: 'Would you love to Rate $appName'
                 '\non ${_getPlatfromStoreName()}?',
             onContinueClicked: () {
               onContinueClicked(context);
@@ -80,7 +87,7 @@ class ReviewPopUpUtils {
   }
 
   Future<void> _openStoreListing() async {
-    await InAppReview.instance.openStoreListing(appStoreId: '1636138219');
+    await InAppReview.instance.openStoreListing(appStoreId: appId);
   }
 
   String _getPlatfromStoreName() {

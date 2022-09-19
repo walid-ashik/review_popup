@@ -33,7 +33,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final reviewPopUp = ReviewPopUpUtils();
+  final reviewPopUp = ReviewPopUpUtils(
+    appName: 'Appuly',
+    appId: '1636138219',
+  );
 
   @override
   void initState() {
@@ -50,20 +53,21 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
+          children: <Widget>[
+            const Text(
               'You have pushed the button this many times:',
             ),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () {
+                reviewPopUp.increaseTotalQuoteSaveSharedCount();
+                reviewPopUp.showReviewPopUp(context);
+                reviewPopUp.buildInAppReviewRequestPopUp(context);
+              },
+              child: const Icon(Icons.add),
+            )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          reviewPopUp.increaseTotalQuoteSaveSharedCount();
-          reviewPopUp.showReviewPopUp(context);
-          reviewPopUp.buildInAppReviewRequestPopUp(context);
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

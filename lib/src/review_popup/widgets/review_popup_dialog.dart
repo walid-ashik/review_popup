@@ -11,7 +11,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReviewPopUp extends StatefulWidget {
-  const ReviewPopUp({Key? key}) : super(key: key);
+  const ReviewPopUp({
+    Key? key,
+    required this.appName,
+    required this.appId,
+  }) : super(key: key);
+
+  final String appName;
+  final String appId;
 
   @override
   State<ReviewPopUp> createState() => _ReviewPopUpState();
@@ -21,10 +28,10 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        'How much are you\nenjoying QuoteWriter?',
+      title: Text(
+        'How much are you\nenjoying ${widget.appName} ?',
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 23,
           fontWeight: FontWeight.w700,
           color: Colors.black,
@@ -97,7 +104,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
       builder: (BuildContext context) {
         return InAppReviewRequestPopUp(
           lottie: 'assets/lottie/hello_expert.json',
-          text: 'Would you love to Rate Quote Writer'
+          text: 'Would you love to Rate ${widget.appName}'
               '\non ${_getPlatfromStoreName()}?',
           onContinueClicked: () {
             onContinueClicked();
@@ -124,7 +131,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
   }
 
   Future<void> _openStoreListing() async {
-    await InAppReview.instance.openStoreListing(appStoreId: '1636138219');
+    await InAppReview.instance.openStoreListing(appStoreId: widget.appId);
   }
 
   String _getPlatfromStoreName() {
@@ -159,7 +166,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
     final canSend = await FlutterMailer.canSendMail();
 
     final _mailOptions = MailOptions(
-      subject: 'QuoteWriter : Feedback',
+      subject: '${widget.appName} : Feedback',
       recipients: ['invalidco.bin@gmail.com'],
       ccRecipients: ['invalidco.bin@gmail.com'],
     );
@@ -168,7 +175,7 @@ class _ReviewPopUpState extends State<ReviewPopUp> {
       await FlutterMailer.send(_mailOptions);
     } else {
       const recipient = 'invalidco.bin@gmail.com';
-      const url = 'mailto:$recipient?body= &subject=QuoteWriter : Feedback';
+      var url = 'mailto:$recipient?body= &subject=${widget.appName} : Feedback';
       if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url));
       }
